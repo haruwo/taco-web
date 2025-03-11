@@ -8,6 +8,8 @@ interface TachometerProps {
     redZone: number;
     speed: number;
     gearNumber: number | string;
+    width?: number;
+    height?: number;
 }
 
 const Tachometer: React.FC<TachometerProps> = ({
@@ -17,6 +19,8 @@ const Tachometer: React.FC<TachometerProps> = ({
     redZone = 7500,
     speed,
     gearNumber,
+    width = 300,
+    height = 300,
 }) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
@@ -27,8 +31,6 @@ const Tachometer: React.FC<TachometerProps> = ({
         svg.selectAll('*').remove();
 
         // SVGのサイズと中心点
-        const width = 300;
-        const height = 300;
         const centerX = width / 2;
         const centerY = height / 2;
         const radius = Math.min(width, height) / 2 - 20;
@@ -175,11 +177,11 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('font-weight', 'bold')
             .text(`${gearNumber}`);
 
-    }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber]);
+    }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height]);
 
     return (
         <div className="tachometer-container">
-            <svg ref={svgRef} width="300" height="300"></svg>
+            <svg ref={svgRef} width={width} height={height}></svg>
         </div>
     );
 };

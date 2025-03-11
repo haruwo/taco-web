@@ -24,6 +24,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const defaultYellowZone = 7000;
     const defaultRedZone = 7500;
     const defaultMaxRpm = 8000;
+    const defaultWidth = 300;
+    const defaultHeight = 300;
 
     // 状態管理
     const [gearRatios, setGearRatios] = useState(defaultGearRatios);
@@ -34,6 +36,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const [maxRpm, setMaxRpm] = useState(defaultMaxRpm);
     const [speed, setSpeed] = useState(60);
     const [selectedGear, setSelectedGear] = useState(1);
+    const [width, setWidth] = useState(defaultWidth);
+    const [height, setHeight] = useState(defaultHeight);
 
     // 各ギアでのRPMを計算
     const [rpms, setRpms] = useState<number[]>([]);
@@ -88,6 +92,23 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const handleRedZoneChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value) || 0;
         setRedZone(value);
+    };
+
+    // maxRpmの入力ハンドラー
+    const handleMaxRpmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseInt(e.target.value) || 0;
+        setMaxRpm(value);
+    };
+
+    // width, heightの入力ハンドラー
+    const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseInt(e.target.value) || 0;
+        setWidth(value);
+    };
+
+    const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseInt(e.target.value) || 0;
+        setHeight(value);
     };
 
     // 速度の入力ハンドラー
@@ -177,7 +198,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">第7速 (オプション)</label>
+                            <label className="block text-sm font-medium mb-1">第7速</label>
                             <input
                                 type="number"
                                 step="0.001"
@@ -187,7 +208,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">第8速 (オプション)</label>
+                            <label className="block text-sm font-medium mb-1">第8速</label>
                             <input
                                 type="number"
                                 step="0.001"
@@ -197,7 +218,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             />
                         </div>
                         <div>
-                            <label className="block text-sm font-medium mb-1">第9速 (オプション)</label>
+                            <label className="block text-sm font-medium mb-1">第9速</label>
                             <input
                                 type="number"
                                 step="0.001"
@@ -261,6 +282,39 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                 className="w-full px-3 py-2 border rounded-md"
                             />
                         </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">最大RPM</label>
+                            <input
+                                type="number"
+                                step="100"
+                                value={maxRpm || ''}
+                                onChange={handleMaxRpmChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            />
+                        </div>
+                    </div>
+
+                    <div className="grid grid-cols-2 gap-4 mb-6">
+                        <div>
+                            <label className="block text-sm font-medium mb-1">タコメーター幅 (px)</label>
+                            <input
+                                type="number"
+                                step="10"
+                                value={width || ''}
+                                onChange={handleWidthChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">タコメーター高さ (px)</label>
+                            <input
+                                type="number"
+                                step="10"
+                                value={height || ''}
+                                onChange={handleHeightChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            />
+                        </div>
                     </div>
 
                     <div className="mb-6">
@@ -288,7 +342,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         />
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4">
+                    <div className="grid grid-cols-3 gap-4">
                         {rpms.map((rpm, index) => {
                             // 後退ギアは除外（rpmsの最後の要素）
                             if (index === rpms.length - 1) return null;
@@ -302,6 +356,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                         redZone={redZone}
                                         speed={speed}
                                         gearNumber={index + 1}
+                                        width={width}
+                                        height={height}
                                     />
                                 </div>
                             );
