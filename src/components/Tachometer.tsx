@@ -33,11 +33,13 @@ const Tachometer: React.FC<TachometerProps> = ({
         const centerY = height / 2;
         const radius = Math.min(width, height) / 2 - 20;
 
-        // 角度の範囲（タコメーターは通常、180度から0度まで）
-        const startAngle = -Math.PI * 0.75; // -135度
-        const endAngle = Math.PI * 0.75;    // 135度
+        // 角度の範囲（左下から右下まで、時計回り）
+        // 左下は225度 = 5π/4、右下は315度 = 7π/4
+        const startAngle = Math.PI * 1.001; // 左
+        const endAngle = Math.PI * 1.999;   // 右
+        const quarterAngle = Math.PI * 0.5;
 
-        // RPMの範囲を角度に変換する関数
+        // RPMの範囲を角度に変換する関数（時計回りに回転）
         const scaleRpm = d3.scaleLinear()
             .domain([0, maxRpm])
             .range([startAngle, endAngle]);
@@ -46,8 +48,8 @@ const Tachometer: React.FC<TachometerProps> = ({
         const arcBackground = d3.arc()
             .innerRadius(radius - 30)
             .outerRadius(radius)
-            .startAngle(startAngle)
-            .endAngle(endAngle);
+            .startAngle(startAngle + quarterAngle)
+            .endAngle(endAngle + quarterAngle);
 
         svg.append('path')
             .attr('d', arcBackground as any)
@@ -55,31 +57,36 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('fill', '#e0e0e0');
 
         // イエローゾーンの円弧を描画
-        const arcYellow = d3.arc()
-            .innerRadius(radius - 30)
-            .outerRadius(radius)
-            .startAngle(scaleRpm(yellowZone))
-            .endAngle(scaleRpm(redZone));
+        if (yellowZone < maxRpm) {
+            const arcYellow = d3.arc()
+                .innerRadius(radius - 30)
+                .outerRadius(radius)
+                .startAngle(scaleRpm(yellowZone) + quarterAngle)
+                .endAngle(scaleRpm(Math.min(redZone, maxRpm)) + quarterAngle);
 
-        svg.append('path')
-            .attr('d', arcYellow as any)
-            .attr('transform', `translate(${centerX}, ${centerY})`)
-            .attr('fill', '#FFD700');
+            svg.append('path')
+                .attr('d', arcYellow as any)
+                .attr('transform', `translate(${centerX}, ${centerY})`)
+                .attr('fill', '#FFD700');
+        }
 
         // レッドゾーンの円弧を描画
-        const arcRed = d3.arc()
-            .innerRadius(radius - 30)
-            .outerRadius(radius)
-            .startAngle(scaleRpm(redZone))
-            .endAngle(endAngle);
+        if (redZone < maxRpm) {
+            const arcRed = d3.arc()
+                .innerRadius(radius - 30)
+                .outerRadius(radius)
+                .startAngle(scaleRpm(redZone) + quarterAngle)
+                .endAngle(scaleRpm(maxRpm) + quarterAngle);
 
-        svg.append('path')
-            .attr('d', arcRed as any)
-            .attr('transform', `translate(${centerX}, ${centerY})`)
-            .attr('fill', '#FF0000');
+            svg.append('path')
+                .attr('d', arcRed as any)
+                .attr('transform', `translate(${centerX}, ${centerY})`)
+                .attr('fill', '#FF0000');
+        }
 
         // 目盛りを描画
-        const ticks = d3.range(0, maxRpm + 1, 1000);
+        const tickStep = maxRpm <= 10000 ? 1000 : 2000;
+        const ticks = d3.range(0, maxRpm + 1, tickStep);
 
         ticks.forEach(tick => {
             const angle = scaleRpm(tick);
@@ -96,7 +103,7 @@ const Tachometer: React.FC<TachometerProps> = ({
                 .attr('stroke', 'black')
                 .attr('stroke-width', 2);
 
-            // 1000単位の目盛りにラベルを追加
+            // 目盛りにラベルを追加
             const labelX = centerX + (radius - 45) * Math.cos(angle);
             const labelY = centerY + (radius - 45) * Math.sin(angle);
 
@@ -115,20 +122,32 @@ const Tachometer: React.FC<TachometerProps> = ({
         const needleX = centerX + needleLength * Math.cos(needleAngle);
         const needleY = centerY + needleLength * Math.sin(needleAngle);
 
-        svg.append('line')
-            .attr('x1', centerX)
-            .attr('y1', centerY)
-            .attr('x2', needleX)
-            .attr('y2', needleY)
-            .attr('stroke', 'red')
-            .attr('stroke-width', 3);
+        // 針の根元部分（三角形）
+        const needleBaseSize = 8;
+        const needleBaseAngle1 = needleAngle + Math.PI / 2;
+        const needleBaseAngle2 = needleAngle - Math.PI / 2;
+        const needleBaseX1 = centerX + needleBaseSize * Math.cos(needleBaseAngle1);
+        const needleBaseY1 = centerY + needleBaseSize * Math.sin(needleBaseAngle1);
+        const needleBaseX2 = centerX + needleBaseSize * Math.cos(needleBaseAngle2);
+        const needleBaseY2 = centerY + needleBaseSize * Math.sin(needleBaseAngle2);
+
+        svg.append('path')
+            .attr('d', `M ${needleBaseX1} ${needleBaseY1} L ${needleX} ${needleY} L ${needleBaseX2} ${needleBaseY2} Z`)
+            .attr('fill', 'red')
+            .attr('stroke', 'none');
 
         // 中心の円を描画
         svg.append('circle')
             .attr('cx', centerX)
             .attr('cy', centerY)
             .attr('r', 10)
-            .attr('fill', 'black');
+            .attr('fill', '#333');
+
+        svg.append('circle')
+            .attr('cx', centerX)
+            .attr('cy', centerY)
+            .attr('r', 6)
+            .attr('fill', '#666');
 
         // RPM値を表示
         svg.append('text')
@@ -137,7 +156,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('text-anchor', 'middle')
             .attr('font-size', '24px')
             .attr('font-weight', 'bold')
-            .text(`${rpm} RPM`);
+            .text(`${Math.round(rpm)} RPM`);
 
         // 速度を表示
         svg.append('text')
@@ -159,7 +178,9 @@ const Tachometer: React.FC<TachometerProps> = ({
     }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber]);
 
     return (
-        <svg ref={svgRef} width="300" height="300"></svg>
+        <div className="tachometer-container">
+            <svg ref={svgRef} width="300" height="300"></svg>
+        </div>
     );
 };
 
