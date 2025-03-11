@@ -120,12 +120,12 @@ const Tachometer: React.FC<TachometerProps> = ({
 
         // 針を描画
         const needleAngle = scaleRpm(Math.min(rpm, maxRpm));
-        const needleLength = radius - 40;
+        const needleLength = radius - 8;
         const needleX = centerX + needleLength * Math.cos(needleAngle);
         const needleY = centerY + needleLength * Math.sin(needleAngle);
 
         // 針の根元部分（三角形）
-        const needleBaseSize = 8;
+        const needleBaseSize = 3;
         const needleBaseAngle1 = needleAngle + Math.PI / 2;
         const needleBaseAngle2 = needleAngle - Math.PI / 2;
         const needleBaseX1 = centerX + needleBaseSize * Math.cos(needleBaseAngle1);

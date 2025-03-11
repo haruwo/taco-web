@@ -50,4 +50,24 @@ export function calculateTireDiameter(tireSize: string): number {
 
     // mmをメートルに変換
     return tireDiameterMm / 1000;
+}
+
+/**
+ * タイヤの外周を計算する (メートル単位)
+ * @param tireSize タイヤサイズ文字列 (例: "195/50/R16")
+ * @returns タイヤの外周 (メートル)
+ */
+export function calculateTireCircumference(tireSize: string): number {
+    const diameter = calculateTireDiameter(tireSize);
+    return Math.PI * diameter;
+}
+
+/**
+ * 1kmあたりのタイヤ回転数を計算する
+ * @param tireSize タイヤサイズ文字列 (例: "195/50/R16")
+ * @returns 1kmあたりのタイヤ回転数
+ */
+export function calculateRotationsPerKm(tireSize: string): number {
+    const circumference = calculateTireCircumference(tireSize);
+    return 1000 / circumference;
 } 

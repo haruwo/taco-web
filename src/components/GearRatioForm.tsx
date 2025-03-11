@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Tachometer from './Tachometer';
 import { calculateRPMForAllGears } from '@/lib/rpmCalculator';
+import { calculateTireDiameter, calculateTireCircumference, calculateRotationsPerKm } from '@/lib/tireCalculator';
 
 interface GearRatioFormProps { }
 
@@ -36,11 +37,20 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const [maxRpm, setMaxRpm] = useState(defaultMaxRpm);
     const [speed, setSpeed] = useState(60);
     const [selectedGear, setSelectedGear] = useState(1);
-    const [width, setWidth] = useState(defaultWidth);
-    const [height, setHeight] = useState(defaultHeight);
+
+    // タコメーターのサイズ管理
+    const [tachometerSize, setTachometerSize] = useState({ width: 300, height: 300 });
+    const tachometerGridRef = useRef<HTMLDivElement>(null);
 
     // 各ギアでのRPMを計算
     const [rpms, setRpms] = useState<number[]>([]);
+
+    // タイヤ外径と外周を計算
+    const tireDiameter = calculateTireDiameter(tireSize);
+    const tireDiameterCm = (tireDiameter * 100).toFixed(1);
+    const tireCircumference = calculateTireCircumference(tireSize);
+    const tireCircumferenceCm = (tireCircumference * 100).toFixed(1);
+    const rotationsPerKm = calculateRotationsPerKm(tireSize).toFixed(1);
 
     useEffect(() => {
         const gearRatiosArray = [
@@ -65,6 +75,42 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
 
         setRpms(calculatedRpms);
     }, [speed, gearRatios, finalDriveRatio, tireSize]);
+
+    // タコメーターのサイズをグリッドに合わせて調整
+    useEffect(() => {
+        if (!tachometerGridRef.current) return;
+
+        const updateTachometerSize = () => {
+            const tachometerItems = tachometerGridRef.current?.querySelectorAll('.tachometer-item');
+            if (!tachometerItems || tachometerItems.length === 0) return;
+
+            // 最初のタコメーターアイテムのサイズを取得
+            const firstItem = tachometerItems[0] as HTMLElement;
+            const itemWidth = firstItem.clientWidth;
+            const itemHeight = firstItem.clientHeight;
+
+            // パディングを考慮してサイズを調整
+            const padding = 32; // p-4 = 16px × 2
+            const newWidth = Math.max(itemWidth - padding, 150);
+            const newHeight = Math.max(newWidth, 150); // 正方形に近い形に
+
+            setTachometerSize({ width: newWidth, height: newHeight });
+        };
+
+        // 初期サイズ設定
+        updateTachometerSize();
+
+        // ResizeObserverを使用してサイズ変更を監視
+        const resizeObserver = new ResizeObserver(() => {
+            updateTachometerSize();
+        });
+
+        resizeObserver.observe(tachometerGridRef.current);
+
+        return () => {
+            resizeObserver.disconnect();
+        };
+    }, [rpms.length]); // RPMの数が変わったときにも再計算
 
     // ギア比の入力ハンドラー
     const handleGearRatioChange = (gear: keyof typeof gearRatios, value: string) => {
@@ -98,17 +144,6 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const handleMaxRpmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value) || 0;
         setMaxRpm(value);
-    };
-
-    // width, heightの入力ハンドラー
-    const handleWidthChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(e.target.value) || 0;
-        setWidth(value);
-    };
-
-    const handleHeightChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const value = parseInt(e.target.value) || 0;
-        setHeight(value);
     };
 
     // 速度の入力ハンドラー
@@ -294,29 +329,6 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         </div>
                     </div>
 
-                    <div className="grid grid-cols-2 gap-4 mb-6">
-                        <div>
-                            <label className="block text-sm font-medium mb-1">タコメーター幅 (px)</label>
-                            <input
-                                type="number"
-                                step="10"
-                                value={width || ''}
-                                onChange={handleWidthChange}
-                                className="w-full px-3 py-2 border rounded-md"
-                            />
-                        </div>
-                        <div>
-                            <label className="block text-sm font-medium mb-1">タコメーター高さ (px)</label>
-                            <input
-                                type="number"
-                                step="10"
-                                value={height || ''}
-                                onChange={handleHeightChange}
-                                className="w-full px-3 py-2 border rounded-md"
-                            />
-                        </div>
-                    </div>
-
                     <div className="mb-6">
                         <label className="block text-sm font-medium mb-1">速度: {speed} km/h</label>
                         <input
@@ -342,13 +354,60 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         />
                     </div>
 
-                    <div className="grid grid-cols-3 gap-4">
+                    <div className="bg-white p-4 rounded-lg shadow-md mb-4">
+                        <h3 className="text-lg font-semibold mb-2">タイヤ情報と計算式</h3>
+                        <div className="mb-2">
+                            <span className="font-medium">現在のタイヤサイズ:</span> {tireSize}
+                        </div>
+                        <div className="mb-2">
+                            <span className="font-medium">タイヤ外径:</span> {tireDiameterCm} cm
+                        </div>
+                        <div className="mb-2">
+                            <span className="font-medium">タイヤ外周:</span> {tireCircumferenceCm} cm
+                        </div>
+                        <div className="mb-2">
+                            <span className="font-medium">1km走行あたりの回転数:</span> {rotationsPerKm} 回転
+                        </div>
+                        <div className="mb-3">
+                            <span className="font-medium">タイヤ外径の計算式:</span>
+                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                                タイヤ外径 = リム径(インチ) × 25.4 + 2 × (タイヤ幅(mm) × 扁平率 ÷ 100)
+                                <br />
+                                <span className="text-gray-600">例: {tireSize} の場合</span>
+                                <br />
+                                リム径 = 16インチ, タイヤ幅 = 195mm, 扁平率 = 50%
+                                <br />
+                                タイヤ外径 = 16 × 25.4 + 2 × (195 × 50 ÷ 100) = {tireDiameterCm} cm
+                            </div>
+                        </div>
+                        <div className="mb-2">
+                            <span className="font-medium">タイヤ外周の計算式:</span>
+                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                                タイヤ外周 = π × タイヤ外径
+                                <br />
+                                <span className="text-gray-600">例: {tireSize} の場合</span>
+                                <br />
+                                タイヤ外周 = π × {tireDiameterCm} cm = {tireCircumferenceCm} cm
+                            </div>
+                        </div>
+                        <div className="mb-2">
+                            <span className="font-medium">RPM計算式:</span>
+                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                                RPM = (速度[km/h] × ギア比 × 最終減速比 × 60) ÷ (タイヤ外周[m] × 3.6)
+                            </div>
+                        </div>
+                        <div className="text-sm text-gray-600 mt-2">
+                            <span className="font-medium">現在の設定:</span> 最終減速比 = {finalDriveRatio}
+                        </div>
+                    </div>
+
+                    <div ref={tachometerGridRef} className="grid grid-cols-3 gap-4">
                         {rpms.map((rpm, index) => {
                             // 後退ギアは除外（rpmsの最後の要素）
                             if (index === rpms.length - 1) return null;
 
                             return (
-                                <div key={index} className="bg-white p-4 rounded-lg shadow-md">
+                                <div key={index} className="bg-white p-4 rounded-lg shadow-md tachometer-item">
                                     <Tachometer
                                         rpm={rpm}
                                         maxRpm={maxRpm}
@@ -356,8 +415,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                         redZone={redZone}
                                         speed={speed}
                                         gearNumber={index + 1}
-                                        width={width}
-                                        height={height}
+                                        width={tachometerSize.width}
+                                        height={tachometerSize.height}
                                     />
                                 </div>
                             );
