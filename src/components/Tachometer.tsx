@@ -10,6 +10,8 @@ interface TachometerProps {
     gearNumber: number | string;
     width?: number;
     height?: number;
+    startAngle?: number;
+    endAngle?: number;
 }
 
 const Tachometer: React.FC<TachometerProps> = ({
@@ -21,6 +23,8 @@ const Tachometer: React.FC<TachometerProps> = ({
     gearNumber,
     width = 300,
     height = 300,
+    startAngle = Math.PI * 0.5,
+    endAngle = Math.PI * 2.0,
 }) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
@@ -49,9 +53,6 @@ const Tachometer: React.FC<TachometerProps> = ({
         const innerCircleRadius = Math.max(4, Math.round(6 * scaleFactor));
 
         // 角度の範囲（左下から右下まで、時計回り）
-        // 左下は225度 = 5π/4、右下は315度 = 7π/4
-        const startAngle = Math.PI * 0.5; // 左
-        const endAngle = Math.PI * 1.999;   // 右
         const quarterAngle = Math.PI * 0.5;
 
         // RPMの範囲を角度に変換する関数（時計回りに回転）
@@ -199,7 +200,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('font-weight', 'bold')
             .text(`${gearNumber}`);
 
-    }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height]);
+    }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height, startAngle, endAngle]);
 
     return (
         <div className="tachometer-container">

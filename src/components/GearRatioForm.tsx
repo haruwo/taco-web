@@ -27,6 +27,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const defaultMaxRpm = 8000;
     const defaultWidth = 300;
     const defaultHeight = 300;
+    const defaultStartAngle = Math.PI * 0.5;
+    const defaultEndAngle = Math.PI * 2.0;
 
     // 状態管理
     const [gearRatios, setGearRatios] = useState(defaultGearRatios);
@@ -37,6 +39,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const [maxRpm, setMaxRpm] = useState(defaultMaxRpm);
     const [speed, setSpeed] = useState(60);
     const [selectedGear, setSelectedGear] = useState(1);
+    const [startAngle, setStartAngle] = useState(defaultStartAngle);
+    const [endAngle, setEndAngle] = useState(defaultEndAngle);
 
     // タコメーターのサイズ管理
     const [tachometerSize, setTachometerSize] = useState({ width: 300, height: 300 });
@@ -144,6 +148,18 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const handleMaxRpmChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = parseInt(e.target.value) || 0;
         setMaxRpm(value);
+    };
+
+    // startAngleの入力ハンドラー
+    const handleStartAngleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(e.target.value) || 0;
+        setStartAngle(value * Math.PI);
+    };
+
+    // endAngleの入力ハンドラー
+    const handleEndAngleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseFloat(e.target.value) || 0;
+        setEndAngle(value * Math.PI);
     };
 
     // 速度の入力ハンドラー
@@ -298,6 +314,26 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
 
                     <div className="grid grid-cols-2 gap-4 mb-6">
                         <div>
+                            <label className="block text-sm font-medium mb-1">開始角度 (π×)</label>
+                            <input
+                                type="number"
+                                step="0.1"
+                                value={startAngle / Math.PI}
+                                onChange={handleStartAngleChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            />
+                        </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">終了角度 (π×)</label>
+                            <input
+                                type="number"
+                                step="0.1"
+                                value={endAngle / Math.PI}
+                                onChange={handleEndAngleChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            />
+                        </div>
+                        <div>
                             <label className="block text-sm font-medium mb-1">イエローゾーン開始 (rpm)</label>
                             <input
                                 type="number"
@@ -329,21 +365,23 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         </div>
                     </div>
 
-                    <div className="mb-6">
-                        <label className="block text-sm font-medium mb-1">速度: {speed} km/h</label>
-                        <input
-                            type="range"
-                            min="0"
-                            max="300"
-                            value={speed}
-                            onChange={handleSpeedChange}
-                            className="w-full"
-                        />
-                    </div>
                 </div>
 
                 {/* 右側: タコメーター表示 */}
                 <div>
+                    <div className="mb-6">
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <label className="block text-sm font-medium mb-1">速度: {speed} km/h</label>
+                            <input
+                                type="range"
+                                min="0"
+                                max="300"
+                                value={speed}
+                                onChange={handleSpeedChange}
+                                className="w-full"
+                            />
+                        </div>
+                    </div>
                     <div ref={tachometerGridRef} className="grid grid-cols-3 gap-4">
                         {rpms.map((rpm, index) => {
                             // 後退ギアは除外（rpmsの最後の要素）
@@ -360,6 +398,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                         gearNumber={index + 1}
                                         width={tachometerSize.width}
                                         height={tachometerSize.height}
+                                        startAngle={startAngle}
+                                        endAngle={endAngle}
                                     />
                                 </div>
                             );
