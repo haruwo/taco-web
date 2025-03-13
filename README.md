@@ -2,6 +2,12 @@
 
 車両のギア比、最終減速比、タイヤサイズを入力すると、速度に応じたエンジン回転数をタコメーターで表示するウェブアプリケーションです。
 
+## デモ
+
+このアプリケーションはGitHub Pagesでホスティングされています。以下のURLでアクセスできます：
+
+[https://haruwo.github.io/taco-web/](https://haruwo.github.io/taco-web/)
+
 ## 機能
 
 - ギア比の設定 (1〜9速までとリバース)
@@ -11,6 +17,7 @@
 - 速度スライダーによるリアルタイムな回転数表示
 - 各ギアでのエンジン回転数の表示
 - タコメーターによる視覚的な表示
+- レッドゾーン以上の回転数では警告表示
 
 ## デフォルト設定
 
@@ -27,13 +34,15 @@
 - TypeScript
 - Tailwind CSS
 - D3.js (タコメーター描画)
+- GitHub Actions (自動デプロイ)
+- GitHub Pages (ホスティング)
 
 ## インストール方法
 
 ```bash
 # リポジトリをクローン
-git clone https://github.com/yourusername/gear-ratio-tachometer.git
-cd gear-ratio-tachometer
+git clone https://github.com/haruwo/taco-web.git
+cd taco-web
 
 # 依存関係のインストール
 npm install
@@ -47,7 +56,15 @@ npm run dev
 1. ギア比、最終減速比、タイヤサイズを入力します
 2. イエローゾーン、レッドゾーンの開始回転数を必要に応じて調整します
 3. 速度スライダーを動かして、各ギアでのエンジン回転数を確認します
-4. ギアボタンをクリックして、タコメーターの表示を切り替えます
+4. タコメーターの表示を確認します
+
+## デプロイ方法
+
+このプロジェクトはGitHub Actionsを使用して自動的にGitHub Pagesにデプロイされます。
+
+1. 変更をmasterブランチにプッシュすると、GitHub Actionsが自動的に実行されます
+2. ビルドが成功すると、gh-pagesブランチに静的ファイルがデプロイされます
+3. GitHub Pagesの設定で、gh-pagesブランチが公開ソースとして設定されます
 
 ## ライセンス
 
