@@ -41,10 +41,5 @@
     "storybook": "^8.6.4",
     "ts-jest": "^29.2.6",
     "typescript": "^5.3.3"
-  },
-  "eslintConfig": {
-    "extends": [
-      "plugin:storybook/recommended"
-    ]
   }
 }
