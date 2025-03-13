@@ -6,6 +6,10 @@ on:
       - main
       - master # masterブランチにプッシュされた場合にも実行
 
+# GitHub Actionsに書き込み権限を付与
+permissions:
+  contents: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -32,3 +36,4 @@ jobs:
         with:
           folder: out # Next.jsの静的出力ディレクトリ
           branch: gh-pages # デプロイ先のブランチ
+          token: ${{ secrets.GITHUB_TOKEN }} # 明示的にトークンを指定
