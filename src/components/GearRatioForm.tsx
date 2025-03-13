@@ -344,6 +344,28 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
 
                 {/* 右側: タコメーター表示 */}
                 <div>
+                    <div ref={tachometerGridRef} className="grid grid-cols-3 gap-4">
+                        {rpms.map((rpm, index) => {
+                            // 後退ギアは除外（rpmsの最後の要素）
+                            if (index === rpms.length - 1) return null;
+
+                            return (
+                                <div key={index} className="bg-white p-4 rounded-lg shadow-md tachometer-item">
+                                    <Tachometer
+                                        rpm={rpm}
+                                        maxRpm={maxRpm}
+                                        yellowZone={yellowZone}
+                                        redZone={redZone}
+                                        speed={speed}
+                                        gearNumber={index + 1}
+                                        width={tachometerSize.width}
+                                        height={tachometerSize.height}
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
+
                     <div className="mb-4">
                         <label className="block text-sm font-medium mb-1">速度 (km/h)</label>
                         <input
@@ -401,27 +423,6 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         </div>
                     </div>
 
-                    <div ref={tachometerGridRef} className="grid grid-cols-3 gap-4">
-                        {rpms.map((rpm, index) => {
-                            // 後退ギアは除外（rpmsの最後の要素）
-                            if (index === rpms.length - 1) return null;
-
-                            return (
-                                <div key={index} className="bg-white p-4 rounded-lg shadow-md tachometer-item">
-                                    <Tachometer
-                                        rpm={rpm}
-                                        maxRpm={maxRpm}
-                                        yellowZone={yellowZone}
-                                        redZone={redZone}
-                                        speed={speed}
-                                        gearNumber={index + 1}
-                                        width={tachometerSize.width}
-                                        height={tachometerSize.height}
-                                    />
-                                </div>
-                            );
-                        })}
-                    </div>
                 </div>
             </div>
         </div>
