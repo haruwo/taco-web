@@ -9,6 +9,13 @@ export const metadata: Metadata = {
     description: 'ギア比からエンジン回転数と速度を計算するアプリケーション',
 }
 
+export const viewport = {
+    width: 'device-width',
+    initialScale: 1,
+    maximumScale: 1,
+    userScalable: false,
+}
+
 export default function RootLayout({
     children,
 }: {
