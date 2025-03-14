@@ -1,0 +1,5 @@
+presets:
+  - modelCode: ND5RC
+    description: マツダ ロードスター（ND 1.5）
+  - modelCode: ZC33S
+    description: スズキ スイフトスポーツ（1.4ターボ）
