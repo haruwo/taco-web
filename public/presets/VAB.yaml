@@ -1,0 +1,21 @@
+modelCode: VAB
+description: スバル WRX STI（VAB 2.0Lターボ）
+gearRatios:
+  first: 3.636
+  second: 2.375
+  third: 1.761
+  fourth: 1.346
+  fifth: 1.062
+  sixth: 0.842
+  seventh: 0
+  eighth: 0
+  ninth: 0
+  reverse: 3.545
+finalDriveRatio: 3.9
+tireSize: 245/35/R19
+yellowZone: 8000
+redZone: 8000
+maxRpm: 9000
+startAngle: 3.141592653589793
+endAngle: 7.0685834705770345
+columnsCount: 3
