@@ -348,27 +348,27 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     };
 
     return (
-        <div className="container mx-auto p-4">
-            <h1 className="text-2xl font-bold mb-6">ギア比タコメーターアプリ</h1>
+        <div className="container mx-auto p-4 dark:bg-gray-900 dark:text-white">
+            <h1 className="text-2xl font-bold mb-6 dark:text-white">ギア比タコメーターアプリ</h1>
 
             <div className="mb-4">
-                <h2 className="text-xl font-semibold">{description}</h2>
-                <p className="text-gray-600">型式: {modelCode}</p>
+                <h2 className="text-xl font-semibold dark:text-white">{description}</h2>
+                <p className="text-gray-600 dark:text-gray-400">型式: {modelCode}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* タコメーター表示 */}
                 <div>
                     <div className="mb-6">
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <label className="block text-sm font-medium mb-1">速度: {speed} km/h</label>
+                        <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                            <label className="block text-sm font-medium mb-1 dark:text-white">速度: {speed} km/h</label>
                             <input
                                 type="range"
                                 min="0"
                                 max="300"
                                 value={speed}
                                 onChange={handleSpeedChange}
-                                className="w-full"
+                                className="w-full dark:bg-gray-700"
                             />
                         </div>
                     </div>
@@ -385,7 +385,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                 }
 
                                 return (
-                                    <div key={index} className="bg-white p-4 rounded-lg shadow-md tachometer-item">
+                                    <div key={index} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-md tachometer-item">
                                         <Tachometer
                                             rpm={rpm}
                                             maxRpm={maxRpm}
@@ -413,152 +413,152 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         <PresetSelector onSelect={loadPreset} presets={availablePresets} />
                     </div>
 
-                    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
-                        <h2 className="text-xl font-semibold mb-4">基本情報</h2>
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md mb-6">
+                        <h2 className="text-xl font-semibold mb-4 dark:text-white">基本情報</h2>
                         <div className="grid grid-cols-1 gap-4">
                             <div>
-                                <label className="block text-sm font-medium mb-1">型式</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">型式</label>
                                 <input
                                     type="text"
                                     value={modelCode}
                                     onChange={(e) => setModelCode(e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     placeholder="例: ND5RC"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">説明</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">説明</label>
                                 <input
                                     type="text"
                                     value={description}
                                     onChange={(e) => setDescription(e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     placeholder="例: マツダ ロードスター（ND 1.5）"
                                 />
                             </div>
                         </div>
                     </div>
 
-                    <div className="bg-white p-6 rounded-lg shadow-md">
-                        <h2 className="text-xl font-semibold mb-4">詳細設定</h2>
+                    <div className="bg-white dark:bg-gray-800 p-6 rounded-lg shadow-md">
+                        <h2 className="text-xl font-semibold mb-4 dark:text-white">詳細設定</h2>
 
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label className="block text-sm font-medium mb-1">第1速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第1速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.first || ''}
                                     onChange={(e) => handleGearRatioChange('first', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第2速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第2速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.second || ''}
                                     onChange={(e) => handleGearRatioChange('second', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第3速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第3速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.third || ''}
                                     onChange={(e) => handleGearRatioChange('third', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第4速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第4速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.fourth || ''}
                                     onChange={(e) => handleGearRatioChange('fourth', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第5速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第5速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.fifth || ''}
                                     onChange={(e) => handleGearRatioChange('fifth', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第6速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第6速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.sixth || ''}
                                     onChange={(e) => handleGearRatioChange('sixth', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第7速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第7速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.seventh || ''}
                                     onChange={(e) => handleGearRatioChange('seventh', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第8速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第8速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.eighth || ''}
                                     onChange={(e) => handleGearRatioChange('eighth', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">第9速</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">第9速</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.ninth || ''}
                                     onChange={(e) => handleGearRatioChange('ninth', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">後退 (R)</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">後退 (R)</label>
                                 <input
                                     type="number"
                                     step="0.001"
                                     value={gearRatios.reverse || ''}
                                     onChange={(e) => handleGearRatioChange('reverse', e.target.value)}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
@@ -566,99 +566,99 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-sm font-medium mb-1">最終減速比</label>
+                            <label className="block text-sm font-medium mb-1 dark:text-white">最終減速比</label>
                             <input
                                 type="number"
                                 step="0.001"
                                 value={finalDriveRatio || ''}
                                 onChange={handleFinalDriveRatioChange}
-                                className="w-full px-3 py-2 border rounded-md"
+                                className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 inputMode="decimal"
                                 pattern="[0-9]*[.]?[0-9]*"
                             />
                         </div>
 
                         <div className="mb-4">
-                            <label className="block text-sm font-medium mb-1">タイヤサイズ (例: 195/50/R16)</label>
+                            <label className="block text-sm font-medium mb-1 dark:text-white">タイヤサイズ (例: 195/50/R16)</label>
                             <input
                                 type="text"
                                 value={tireSize}
                                 onChange={handleTireSizeChange}
-                                className="w-full px-3 py-2 border rounded-md"
+                                className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                 placeholder="195/50/R16"
                             />
                         </div>
 
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div>
-                                <label className="block text-sm font-medium mb-1">開始角度 (π×)</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">開始角度 (π×)</label>
                                 <input
                                     type="number"
                                     step="0.1"
                                     value={startAngle / Math.PI}
                                     onChange={handleStartAngleChange}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">終了角度 (π×)</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">終了角度 (π×)</label>
                                 <input
                                     type="number"
                                     step="0.1"
                                     value={endAngle / Math.PI}
                                     onChange={handleEndAngleChange}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">イエローゾーン開始 (rpm)</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">イエローゾーン開始 (rpm)</label>
                                 <input
                                     type="number"
                                     step="100"
                                     value={yellowZone || ''}
                                     onChange={handleYellowZoneChange}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">レッドゾーン開始 (rpm)</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">レッドゾーン開始 (rpm)</label>
                                 <input
                                     type="number"
                                     step="100"
                                     value={redZone || ''}
                                     onChange={handleRedZoneChange}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">最大RPM</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">最大RPM</label>
                                 <input
                                     type="number"
                                     step="100"
                                     value={maxRpm || ''}
                                     onChange={handleMaxRpmChange}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">タコメーター列数 (1-9)</label>
+                                <label className="block text-sm font-medium mb-1 dark:text-white">タコメーター列数 (1-9)</label>
                                 <input
                                     type="number"
                                     min="1"
                                     max="9"
                                     value={columnsCount}
                                     onChange={handleColumnsCountChange}
-                                    className="w-full px-3 py-2 border rounded-md"
+                                    className="w-full px-3 py-2 border rounded-md dark:bg-gray-700 dark:border-gray-600 dark:text-white"
                                     inputMode="decimal"
                                     pattern="[1-9]"
                                 />
@@ -666,10 +666,10 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         </div>
 
                         <div className="mb-6">
-                            <button onClick={saveSettings} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >
+                            <button onClick={saveSettings} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded dark:bg-blue-600 dark:hover:bg-blue-800" >
                                 設定を保存
                             </button>
-                            <label className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
+                            <label className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer dark:bg-green-600 dark:hover:bg-green-800">
                                 設定を読み込む
                                 <input
                                     type="file"
@@ -680,25 +680,25 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             </label>
                         </div>
 
-                        <h3 className="text-lg font-semibold mb-2">タイヤ情報と計算式</h3>
-                        <div className="mb-2">
+                        <h3 className="text-lg font-semibold mb-2 dark:text-white">タイヤ情報と計算式</h3>
+                        <div className="mb-2 dark:text-white">
                             <span className="font-medium">現在のタイヤサイズ:</span> {tireSize}
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-2 dark:text-white">
                             <span className="font-medium">タイヤ外径:</span> {tireDiameterCm} cm
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-2 dark:text-white">
                             <span className="font-medium">タイヤ外周:</span> {tireCircumferenceCm} cm
                         </div>
-                        <div className="mb-2">
+                        <div className="mb-2 dark:text-white">
                             <span className="font-medium">1km走行あたりの回転数:</span> {rotationsPerKm} 回転
                         </div>
                         <div className="mb-3">
-                            <span className="font-medium">タイヤ外径の計算式:</span>
-                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                            <span className="font-medium dark:text-white">タイヤ外径の計算式:</span>
+                            <div className="mt-1 text-sm bg-gray-50 dark:bg-gray-700 p-2 rounded dark:text-white">
                                 タイヤ外径 = リム径(インチ) × 25.4 + 2 × (タイヤ幅(mm) × 扁平率 ÷ 100)
                                 <br />
-                                <span className="text-gray-600">例: {tireSize} の場合</span>
+                                <span className="text-gray-600 dark:text-gray-400">例: {tireSize} の場合</span>
                                 <br />
                                 リム径 = 16インチ, タイヤ幅 = 195mm, 扁平率 = 50%
                                 <br />
@@ -706,22 +706,22 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             </div>
                         </div>
                         <div className="mb-2">
-                            <span className="font-medium">タイヤ外周の計算式:</span>
-                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                            <span className="font-medium dark:text-white">タイヤ外周の計算式:</span>
+                            <div className="mt-1 text-sm bg-gray-50 dark:bg-gray-700 p-2 rounded dark:text-white">
                                 タイヤ外周 = π × タイヤ外径
                                 <br />
-                                <span className="text-gray-600">例: {tireSize} の場合</span>
+                                <span className="text-gray-600 dark:text-gray-400">例: {tireSize} の場合</span>
                                 <br />
                                 タイヤ外周 = π × {tireDiameterCm} cm = {tireCircumferenceCm} cm
                             </div>
                         </div>
                         <div className="mb-2">
-                            <span className="font-medium">RPM計算式:</span>
-                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                            <span className="font-medium dark:text-white">RPM計算式:</span>
+                            <div className="mt-1 text-sm bg-gray-50 dark:bg-gray-700 p-2 rounded dark:text-white">
                                 RPM = (速度[km/h] × ギア比 × 最終減速比 × 60) ÷ (タイヤ外周[m] × 3.6)
                             </div>
                         </div>
-                        <div className="text-sm text-gray-600 mt-2">
+                        <div className="text-sm text-gray-600 dark:text-gray-400 mt-2">
                             <span className="font-medium">現在の設定:</span> 最終減速比 = {finalDriveRatio}
                         </div>
                     </div>
