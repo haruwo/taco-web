@@ -7,7 +7,7 @@ interface TachometerProps {
     yellowZone: number;
     redZone: number;
     speed: number;
-    gearNumber: number | string;
+    gearNumber: number;
     width?: number;
     height?: number;
     startAngle?: number;
@@ -186,9 +186,8 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('fill', '#666');
 
         // テキスト位置の調整
-        const rpmTextY = centerY + (50 * scaleFactor);
-        const speedTextY = centerY + (80 * scaleFactor);
-        const gearTextY = centerY + (110 * scaleFactor);
+        const rpmTextY = centerY + (150 * scaleFactor);
+        const gearTextY = centerY - (120 * scaleFactor);
 
         // RPM値がレッドゾーン以上かどうかを判定
         const isInRedZone = rpm >= redZone;
@@ -204,14 +203,6 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('fill', rpmTextColor)
             .text(`${Math.round(rpm)} RPM`);
 
-        // 速度を表示
-        svg.append('text')
-            .attr('x', centerX)
-            .attr('y', speedTextY)
-            .attr('text-anchor', 'middle')
-            .attr('font-size', `${speedFontSize}px`)
-            .text(`${speed} km/h`);
-
         // ギア番号を表示
         svg.append('text')
             .attr('x', centerX)
@@ -219,7 +210,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('text-anchor', 'middle')
             .attr('font-size', `${gearFontSize}px`)
             .attr('font-weight', 'bold')
-            .text(`${gearNumber}`);
+            .text(`${nextGearRpm ? gearNumber + "-" + (gearNumber+1) : gearNumber}`);
 
     }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height, startAngle, endAngle, nextGearRpm]);
 
