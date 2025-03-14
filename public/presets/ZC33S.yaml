@@ -1,0 +1,21 @@
+modelCode: ZC33S
+description: スズキ スイフトスポーツ（1.4ターボ）
+gearRatios:
+  first: 3.615
+  second: 2.047
+  third: 1.518
+  fourth: 1.156
+  fifth: 0.918
+  sixth: 0.794
+  seventh: 0
+  eighth: 0
+  ninth: 0
+  reverse: 3.481
+finalDriveRatio: 3.944
+tireSize: 195/45/R17
+yellowZone: 5800
+redZone: 6200
+maxRpm: 8000
+startAngle: 1.5707963267948966
+endAngle: 6.283185307179586
+columnsCount: 3

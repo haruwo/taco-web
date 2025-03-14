@@ -1,37 +1,20 @@
 import React, { useState, useEffect, useRef } from 'react';
+import { useRouter, useSearchParams } from 'next/navigation';
 import Tachometer from './Tachometer';
+import PresetSelector from './PresetSelector';
 import { calculateRPMForAllGears } from '@/lib/rpmCalculator';
 import { calculateTireDiameter, calculateTireCircumference, calculateRotationsPerKm } from '@/lib/tireCalculator';
 import { dump as yamlDump, load as yamlLoad } from 'js-yaml';
+import { loadPresetSettings } from '@/lib/presets';
+import { Settings, PresetInfo } from '@/types/settings';
 
 interface GearRatioFormProps { }
 
-// 設定のインターフェース
-interface Settings {
-    gearRatios: {
-        first: number;
-        second: number;
-        third: number;
-        fourth: number;
-        fifth: number;
-        sixth: number;
-        seventh: number;
-        eighth: number;
-        ninth: number;
-        reverse: number;
-    };
-    finalDriveRatio: number;
-    tireSize: string;
-    yellowZone: number;
-    redZone: number;
-    maxRpm: number;
-    startAngle: number;
-    endAngle: number;
-    columnsCount: number;
-}
-
 const GearRatioForm: React.FC<GearRatioFormProps> = () => {
-    // デフォルト値
+    const router = useRouter();
+    const searchParams = useSearchParams();
+    const [modelCode, setModelCode] = useState("ND5RC");
+    const [description, setDescription] = useState("マツダ ロードスター（ND 1.5）");
     const defaultGearRatios = {
         first: 5.087,
         second: 2.991,
@@ -226,9 +209,47 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         }
     };
 
+    // プリセットの読み込み
+    const loadPreset = async (preset: PresetInfo) => {
+        try {
+            const yamlStr = await loadPresetSettings(preset.modelCode);
+            const settings = yamlLoad(yamlStr) as Settings;
+
+            setModelCode(settings.modelCode);
+            setDescription(settings.description);
+            setGearRatios(settings.gearRatios);
+            setFinalDriveRatio(settings.finalDriveRatio);
+            setTireSize(settings.tireSize);
+            setYellowZone(settings.yellowZone);
+            setRedZone(settings.redZone);
+            setMaxRpm(settings.maxRpm);
+            setStartAngle(settings.startAngle);
+            setEndAngle(settings.endAngle);
+            setColumnsCount(settings.columnsCount);
+
+            // URLパラメータを更新
+            const params = new URLSearchParams(window.location.search);
+            params.set('preset', preset.modelCode);
+            router.push(`?${params.toString()}`);
+        } catch (error) {
+            console.error('プリセットの読み込みに失敗しました:', error);
+            alert('プリセットの読み込みに失敗しました。');
+        }
+    };
+
+    // URLパラメータからプリセットを読み込む
+    useEffect(() => {
+        const preset = searchParams.get('preset');
+        if (preset) {
+            loadPreset({ modelCode: preset, description: '', url: '' });
+        }
+    }, []);
+
     // 設定を保存する関数
     const saveSettings = () => {
         const settings: Settings = {
+            modelCode,
+            description,
             gearRatios,
             finalDriveRatio,
             tireSize,
@@ -245,7 +266,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         const url = URL.createObjectURL(blob);
         const a = document.createElement('a');
         a.href = url;
-        a.download = 'gear_settings.yaml';
+        a.download = `${modelCode}.yaml`;
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -284,6 +305,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-6">ギア比タコメーターアプリ</h1>
 
+            <PresetSelector onSelect={loadPreset} />
+
             <div className="mb-4 flex gap-4">
                 <button
                     onClick={saveSettings}
@@ -300,6 +323,11 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         className="hidden"
                     />
                 </label>
+            </div>
+
+            <div className="mb-4">
+                <h2 className="text-xl font-semibold">{description}</h2>
+                <p className="text-gray-600">型式: {modelCode}</p>
             </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">

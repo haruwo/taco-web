@@ -12,6 +12,16 @@ const nextConfig = {
     images: {
         unoptimized: true,
     },
+
+    // プリセットファイルのパスを修正
+    async rewrites() {
+        return [
+            {
+                source: '/presets/:path*',
+                destination: '/presets/:path*',
+            },
+        ];
+    },
 }
 
 module.exports = nextConfig 

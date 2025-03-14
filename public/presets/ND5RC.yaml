@@ -1,0 +1,21 @@
+modelCode: ND5RC
+description: マツダ ロードスター（ND 1.5）
+gearRatios:
+  first: 5.087
+  second: 2.991
+  third: 2.035
+  fourth: 1.594
+  fifth: 1.286
+  sixth: 1.000
+  seventh: 0
+  eighth: 0
+  ninth: 0
+  reverse: 4.696
+finalDriveRatio: 2.866
+tireSize: 195/50/R19
+yellowZone: 7000
+redZone: 7500
+maxRpm: 8000
+startAngle: 1.5707963267948966
+endAngle: 6.283185307179586
+columnsCount: 3
