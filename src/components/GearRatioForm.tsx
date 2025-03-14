@@ -2,8 +2,33 @@ import React, { useState, useEffect, useRef } from 'react';
 import Tachometer from './Tachometer';
 import { calculateRPMForAllGears } from '@/lib/rpmCalculator';
 import { calculateTireDiameter, calculateTireCircumference, calculateRotationsPerKm } from '@/lib/tireCalculator';
+import { dump as yamlDump, load as yamlLoad } from 'js-yaml';
 
 interface GearRatioFormProps { }
+
+// 設定のインターフェース
+interface Settings {
+    gearRatios: {
+        first: number;
+        second: number;
+        third: number;
+        fourth: number;
+        fifth: number;
+        sixth: number;
+        seventh: number;
+        eighth: number;
+        ninth: number;
+        reverse: number;
+    };
+    finalDriveRatio: number;
+    tireSize: string;
+    yellowZone: number;
+    redZone: number;
+    maxRpm: number;
+    startAngle: number;
+    endAngle: number;
+    columnsCount: number;
+}
 
 const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     // デフォルト値
@@ -201,9 +226,81 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         }
     };
 
+    // 設定を保存する関数
+    const saveSettings = () => {
+        const settings: Settings = {
+            gearRatios,
+            finalDriveRatio,
+            tireSize,
+            yellowZone,
+            redZone,
+            maxRpm,
+            startAngle,
+            endAngle,
+            columnsCount
+        };
+
+        const yamlStr = yamlDump(settings);
+        const blob = new Blob([yamlStr], { type: 'text/yaml' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = 'gear_settings.yaml';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+    };
+
+    // 設定を読み込む関数
+    const loadSettings = (event: React.ChangeEvent<HTMLInputElement>) => {
+        const file = event.target.files?.[0];
+        if (!file) return;
+
+        const reader = new FileReader();
+        reader.onload = (e) => {
+            try {
+                const yamlStr = e.target?.result as string;
+                const settings = yamlLoad(yamlStr) as Settings;
+
+                setGearRatios(settings.gearRatios);
+                setFinalDriveRatio(settings.finalDriveRatio);
+                setTireSize(settings.tireSize);
+                setYellowZone(settings.yellowZone);
+                setRedZone(settings.redZone);
+                setMaxRpm(settings.maxRpm);
+                setStartAngle(settings.startAngle);
+                setEndAngle(settings.endAngle);
+                setColumnsCount(settings.columnsCount);
+            } catch (error) {
+                console.error('設定ファイルの読み込みに失敗しました:', error);
+                alert('設定ファイルの読み込みに失敗しました。ファイル形式を確認してください。');
+            }
+        };
+        reader.readAsText(file);
+    };
+
     return (
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-6">ギア比タコメーターアプリ</h1>
+
+            <div className="mb-4 flex gap-4">
+                <button
+                    onClick={saveSettings}
+                    className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
+                >
+                    設定を保存
+                </button>
+                <label className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
+                    設定を読み込む
+                    <input
+                        type="file"
+                        accept=".yaml,.yml"
+                        onChange={loadSettings}
+                        className="hidden"
+                    />
+                </label>
+            </div>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
                 {/* タコメーター表示 */}
