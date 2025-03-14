@@ -11,11 +11,11 @@ gearRatios:
   eighth: 0
   ninth: 0
   reverse: 3.545
-finalDriveRatio: 3.900
+finalDriveRatio: 3.9
 tireSize: 245/35/R19
 yellowZone: 8000
 redZone: 8000
 maxRpm: 9000
-startAngle: 1.5707963267948966
-endAngle: 6.283185307179586
+startAngle: 3.141592653589793
+endAngle: 7.0685834705770345
 columnsCount: 3
