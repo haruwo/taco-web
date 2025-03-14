@@ -206,7 +206,53 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
             <h1 className="text-2xl font-bold mb-6">ギア比タコメーターアプリ</h1>
 
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                {/* 左側: 入力フォーム */}
+                {/* タコメーター表示 */}
+                <div>
+                    <div className="mb-6">
+                        <div className="bg-white p-6 rounded-lg shadow-md">
+                            <label className="block text-sm font-medium mb-1">速度: {speed} km/h</label>
+                            <input
+                                type="range"
+                                min="0"
+                                max="300"
+                                value={speed}
+                                onChange={handleSpeedChange}
+                                className="w-full"
+                            />
+                        </div>
+                    </div>
+                    <div ref={tachometerGridRef} className={`grid ${getGridColumnsClass()} gap-4`}>
+                        {rpms.map((rpm, index) => {
+                            // 後退ギアは除外（rpmsの最後の要素）
+                            if (index === rpms.length - 1) return null;
+
+                            let nextGearRpm: number | undefined = rpms[index + 1];
+                            if (nextGearRpm > rpm) {
+                                nextGearRpm = undefined;
+                            }
+
+                            return (
+                                <div key={index} className="bg-white p-4 rounded-lg shadow-md tachometer-item">
+                                    <Tachometer
+                                        rpm={rpm}
+                                        maxRpm={maxRpm}
+                                        yellowZone={yellowZone}
+                                        redZone={redZone}
+                                        speed={speed}
+                                        gearNumber={index + 1}
+                                        nextGearRpm={nextGearRpm}
+                                        width={tachometerSize.width}
+                                        height={tachometerSize.height}
+                                        startAngle={startAngle}
+                                        endAngle={endAngle}
+                                    />
+                                </div>
+                            );
+                        })}
+                    </div>
+                </div>
+
+                {/* 入力フォーム */}
                 <div className="bg-white p-6 rounded-lg shadow-md">
                     <h2 className="text-xl font-semibold mb-4">ギア比設定</h2>
 
@@ -399,108 +445,49 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         </div>
                     </div>
 
-                </div>
-
-                {/* 右側: タコメーター表示 */}
-                <div>
-                    <div className="mb-6">
-                        <div className="bg-white p-6 rounded-lg shadow-md">
-                            <label className="block text-sm font-medium mb-1">速度: {speed} km/h</label>
-                            <input
-                                type="range"
-                                min="0"
-                                max="300"
-                                value={speed}
-                                onChange={handleSpeedChange}
-                                className="w-full"
-                            />
+                    <h3 className="text-lg font-semibold mb-2">タイヤ情報と計算式</h3>
+                    <div className="mb-2">
+                        <span className="font-medium">現在のタイヤサイズ:</span> {tireSize}
+                    </div>
+                    <div className="mb-2">
+                        <span className="font-medium">タイヤ外径:</span> {tireDiameterCm} cm
+                    </div>
+                    <div className="mb-2">
+                        <span className="font-medium">タイヤ外周:</span> {tireCircumferenceCm} cm
+                    </div>
+                    <div className="mb-2">
+                        <span className="font-medium">1km走行あたりの回転数:</span> {rotationsPerKm} 回転
+                    </div>
+                    <div className="mb-3">
+                        <span className="font-medium">タイヤ外径の計算式:</span>
+                        <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                            タイヤ外径 = リム径(インチ) × 25.4 + 2 × (タイヤ幅(mm) × 扁平率 ÷ 100)
+                            <br />
+                            <span className="text-gray-600">例: {tireSize} の場合</span>
+                            <br />
+                            リム径 = 16インチ, タイヤ幅 = 195mm, 扁平率 = 50%
+                            <br />
+                            タイヤ外径 = 16 × 25.4 + 2 × (195 × 50 ÷ 100) = {tireDiameterCm} cm
                         </div>
                     </div>
-                    <div ref={tachometerGridRef} className={`grid ${getGridColumnsClass()} gap-4`}>
-                        {rpms.map((rpm, index) => {
-                            // 後退ギアは除外（rpmsの最後の要素）
-                            if (index === rpms.length - 1) return null;
-
-                            let nextGearRpm: number | undefined = rpms[index + 1];
-                            if (nextGearRpm > rpm) {
-                                nextGearRpm = undefined;
-                            }
-
-                            return (
-                                <div key={index} className="bg-white p-4 rounded-lg shadow-md tachometer-item">
-                                    <Tachometer
-                                        rpm={rpm}
-                                        maxRpm={maxRpm}
-                                        yellowZone={yellowZone}
-                                        redZone={redZone}
-                                        speed={speed}
-                                        gearNumber={index + 1}
-                                        nextGearRpm={nextGearRpm}
-                                        width={tachometerSize.width}
-                                        height={tachometerSize.height}
-                                        startAngle={startAngle}
-                                        endAngle={endAngle}
-                                    />
-                                </div>
-                            );
-                        })}
+                    <div className="mb-2">
+                        <span className="font-medium">タイヤ外周の計算式:</span>
+                        <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                            タイヤ外周 = π × タイヤ外径
+                            <br />
+                            <span className="text-gray-600">例: {tireSize} の場合</span>
+                            <br />
+                            タイヤ外周 = π × {tireDiameterCm} cm = {tireCircumferenceCm} cm
+                        </div>
                     </div>
-
-                    <div className="mb-4">
-                        <label className="block text-sm font-medium mb-1">速度 (km/h)</label>
-                        <input
-                            type="number"
-                            value={speed}
-                            onChange={handleSpeedChange}
-                            className="w-full px-3 py-2 border rounded-md"
-                        />
+                    <div className="mb-2">
+                        <span className="font-medium">RPM計算式:</span>
+                        <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
+                            RPM = (速度[km/h] × ギア比 × 最終減速比 × 60) ÷ (タイヤ外周[m] × 3.6)
+                        </div>
                     </div>
-
-                    <div className="bg-white p-4 rounded-lg shadow-md mb-4">
-                        <h3 className="text-lg font-semibold mb-2">タイヤ情報と計算式</h3>
-                        <div className="mb-2">
-                            <span className="font-medium">現在のタイヤサイズ:</span> {tireSize}
-                        </div>
-                        <div className="mb-2">
-                            <span className="font-medium">タイヤ外径:</span> {tireDiameterCm} cm
-                        </div>
-                        <div className="mb-2">
-                            <span className="font-medium">タイヤ外周:</span> {tireCircumferenceCm} cm
-                        </div>
-                        <div className="mb-2">
-                            <span className="font-medium">1km走行あたりの回転数:</span> {rotationsPerKm} 回転
-                        </div>
-                        <div className="mb-3">
-                            <span className="font-medium">タイヤ外径の計算式:</span>
-                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
-                                タイヤ外径 = リム径(インチ) × 25.4 + 2 × (タイヤ幅(mm) × 扁平率 ÷ 100)
-                                <br />
-                                <span className="text-gray-600">例: {tireSize} の場合</span>
-                                <br />
-                                リム径 = 16インチ, タイヤ幅 = 195mm, 扁平率 = 50%
-                                <br />
-                                タイヤ外径 = 16 × 25.4 + 2 × (195 × 50 ÷ 100) = {tireDiameterCm} cm
-                            </div>
-                        </div>
-                        <div className="mb-2">
-                            <span className="font-medium">タイヤ外周の計算式:</span>
-                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
-                                タイヤ外周 = π × タイヤ外径
-                                <br />
-                                <span className="text-gray-600">例: {tireSize} の場合</span>
-                                <br />
-                                タイヤ外周 = π × {tireDiameterCm} cm = {tireCircumferenceCm} cm
-                            </div>
-                        </div>
-                        <div className="mb-2">
-                            <span className="font-medium">RPM計算式:</span>
-                            <div className="mt-1 text-sm bg-gray-50 p-2 rounded">
-                                RPM = (速度[km/h] × ギア比 × 最終減速比 × 60) ÷ (タイヤ外周[m] × 3.6)
-                            </div>
-                        </div>
-                        <div className="text-sm text-gray-600 mt-2">
-                            <span className="font-medium">現在の設定:</span> 最終減速比 = {finalDriveRatio}
-                        </div>
+                    <div className="text-sm text-gray-600 mt-2">
+                        <span className="font-medium">現在の設定:</span> 最終減速比 = {finalDriveRatio}
                     </div>
 
                 </div>
