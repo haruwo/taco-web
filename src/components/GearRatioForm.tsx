@@ -451,6 +451,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.first || ''}
                                     onChange={(e) => handleGearRatioChange('first', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -461,6 +463,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.second || ''}
                                     onChange={(e) => handleGearRatioChange('second', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -471,6 +475,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.third || ''}
                                     onChange={(e) => handleGearRatioChange('third', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -481,6 +487,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.fourth || ''}
                                     onChange={(e) => handleGearRatioChange('fourth', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -491,6 +499,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.fifth || ''}
                                     onChange={(e) => handleGearRatioChange('fifth', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -501,6 +511,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.sixth || ''}
                                     onChange={(e) => handleGearRatioChange('sixth', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -511,6 +523,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.seventh || ''}
                                     onChange={(e) => handleGearRatioChange('seventh', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -521,6 +535,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.eighth || ''}
                                     onChange={(e) => handleGearRatioChange('eighth', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -531,6 +547,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.ninth || ''}
                                     onChange={(e) => handleGearRatioChange('ninth', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -541,6 +559,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={gearRatios.reverse || ''}
                                     onChange={(e) => handleGearRatioChange('reverse', e.target.value)}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                         </div>
@@ -553,6 +573,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                 value={finalDriveRatio || ''}
                                 onChange={handleFinalDriveRatioChange}
                                 className="w-full px-3 py-2 border rounded-md"
+                                inputMode="decimal"
+                                pattern="[0-9]*[.]?[0-9]*"
                             />
                         </div>
 
@@ -576,6 +598,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={startAngle / Math.PI}
                                     onChange={handleStartAngleChange}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -586,6 +610,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={endAngle / Math.PI}
                                     onChange={handleEndAngleChange}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*[.]?[0-9]*"
                                 />
                             </div>
                             <div>
@@ -596,6 +622,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={yellowZone || ''}
                                     onChange={handleYellowZoneChange}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*"
                                 />
                             </div>
                             <div>
@@ -606,6 +634,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={redZone || ''}
                                     onChange={handleRedZoneChange}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*"
                                 />
                             </div>
                             <div>
@@ -616,17 +646,21 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                     value={maxRpm || ''}
                                     onChange={handleMaxRpmChange}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[0-9]*"
                                 />
                             </div>
                             <div>
-                                <label className="block text-sm font-medium mb-1">タコメーター列数 (1-6)</label>
+                                <label className="block text-sm font-medium mb-1">タコメーター列数 (1-9)</label>
                                 <input
                                     type="number"
                                     min="1"
-                                    max="6"
+                                    max="9"
                                     value={columnsCount}
                                     onChange={handleColumnsCountChange}
                                     className="w-full px-3 py-2 border rounded-md"
+                                    inputMode="decimal"
+                                    pattern="[1-9]"
                                 />
                             </div>
                         </div>
