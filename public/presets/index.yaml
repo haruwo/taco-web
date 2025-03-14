@@ -1,5 +1,7 @@
 presets:
   - modelCode: ND5RC
     description: マツダ ロードスター（ND 1.5）
+  - modelCode: VAB
+    description: スバル WRX STI（VAB 2.0Lターボ）
   - modelCode: ZC33S
     description: スズキ スイフトスポーツ（1.4ターボ）

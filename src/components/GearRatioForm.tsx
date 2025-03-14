@@ -214,20 +214,43 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     // プリセットの読み込み
     const loadPreset = async (preset: PresetInfo) => {
         try {
-            const yamlStr = await loadPresetSettings(preset.modelCode);
-            const settings = yamlLoad(yamlStr) as Settings;
+            const settings = await loadPresetSettings(preset.modelCode) as Settings;
 
-            setModelCode(settings.modelCode);
-            setDescription(settings.description);
-            setGearRatios(settings.gearRatios);
-            setFinalDriveRatio(settings.finalDriveRatio);
-            setTireSize(settings.tireSize);
-            setYellowZone(settings.yellowZone);
-            setRedZone(settings.redZone);
-            setMaxRpm(settings.maxRpm);
-            setStartAngle(settings.startAngle);
-            setEndAngle(settings.endAngle);
-            setColumnsCount(settings.columnsCount);
+            console.log(JSON.stringify(settings, null, 2));
+
+            if (settings.modelCode) {
+                setModelCode(settings.modelCode);
+            }
+            if (settings.description) {
+                setDescription(settings.description);
+            }
+            if (settings.gearRatios) {
+                setGearRatios(settings.gearRatios);
+            }
+            if (settings.finalDriveRatio) {
+                setFinalDriveRatio(settings.finalDriveRatio);
+            }
+            if (settings.tireSize) {
+                setTireSize(settings.tireSize);
+            }
+            if (settings.yellowZone) {
+                setYellowZone(settings.yellowZone);
+            }
+            if (settings.redZone) {
+                setRedZone(settings.redZone);
+            }
+            if (settings.maxRpm) {
+                setMaxRpm(settings.maxRpm);
+            }
+            if (settings.startAngle) {
+                setStartAngle(settings.startAngle);
+            }
+            if (settings.endAngle) {
+                setEndAngle(settings.endAngle);
+            }
+            if (settings.columnsCount) {
+                setColumnsCount(settings.columnsCount);
+            }
 
             // URLパラメータを更新
             const params = new URLSearchParams(window.location.search);
@@ -299,6 +322,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
             try {
                 const yamlStr = e.target?.result as string;
                 const settings = yamlLoad(yamlStr) as Settings;
+                console.debug(settings);
 
                 setGearRatios(settings.gearRatios);
                 setFinalDriveRatio(settings.finalDriveRatio);
