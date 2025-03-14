@@ -33,6 +33,21 @@ const Tachometer: React.FC<TachometerProps> = ({
     useEffect(() => {
         if (!svgRef.current) return;
 
+        // ダークモードの検出
+        const isDarkMode = window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        // ダークモード用の色設定
+        const colors = {
+            background: isDarkMode ? '#374151' : '#e0e0e0', // dark:bg-gray-700
+            text: isDarkMode ? '#ffffff' : '#000000',
+            needle: '#FF0000',
+            nextNeedle: '#0066cc',
+            centerDark: isDarkMode ? '#1F2937' : '#333', // dark:bg-gray-800
+            centerLight: isDarkMode ? '#374151' : '#666', // dark:bg-gray-700
+            yellow: '#FFD700',
+            red: '#FF0000',
+        };
+
         const svg = d3.select(svgRef.current);
         svg.selectAll('*').remove();
 
@@ -42,7 +57,7 @@ const Tachometer: React.FC<TachometerProps> = ({
         const radius = Math.min(width, height) / 2 - 20;
 
         // サイズに応じたフォントサイズを計算
-        const scaleFactor = Math.min(width, height) / 300; // 300pxを基準にスケーリング
+        const scaleFactor = Math.min(width, height) / 300;
         const tickFontSize = Math.max(8, Math.round(12 * scaleFactor));
         const rpmFontSize = Math.max(16, Math.round(24 * scaleFactor));
         const speedFontSize = Math.max(14, Math.round(20 * scaleFactor));
@@ -72,7 +87,7 @@ const Tachometer: React.FC<TachometerProps> = ({
         svg.append('path')
             .attr('d', arcBackground as any)
             .attr('transform', `translate(${centerX}, ${centerY})`)
-            .attr('fill', '#e0e0e0');
+            .attr('fill', colors.background);
 
         // イエローゾーンの円弧を描画
         if (yellowZone < maxRpm) {
@@ -85,7 +100,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             svg.append('path')
                 .attr('d', arcYellow as any)
                 .attr('transform', `translate(${centerX}, ${centerY})`)
-                .attr('fill', '#FFD700');
+                .attr('fill', colors.yellow);
         }
 
         // レッドゾーンの円弧を描画
@@ -99,7 +114,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             svg.append('path')
                 .attr('d', arcRed as any)
                 .attr('transform', `translate(${centerX}, ${centerY})`)
-                .attr('fill', '#FF0000');
+                .attr('fill', colors.red);
         }
 
         // 目盛りを描画
@@ -118,7 +133,7 @@ const Tachometer: React.FC<TachometerProps> = ({
                 .attr('y1', y1)
                 .attr('x2', x2)
                 .attr('y2', y2)
-                .attr('stroke', 'black')
+                .attr('stroke', colors.text)
                 .attr('stroke-width', tickWidth);
 
             // 目盛りにラベルを追加
@@ -131,6 +146,7 @@ const Tachometer: React.FC<TachometerProps> = ({
                 .attr('text-anchor', 'middle')
                 .attr('dominant-baseline', 'middle')
                 .attr('font-size', `${tickFontSize}px`)
+                .attr('fill', colors.text)
                 .text(tick / 1000);
         });
 
@@ -150,7 +166,7 @@ const Tachometer: React.FC<TachometerProps> = ({
 
         svg.append('path')
             .attr('d', `M ${needleBaseX1} ${needleBaseY1} L ${needleX} ${needleY} L ${needleBaseX2} ${needleBaseY2} Z`)
-            .attr('fill', 'red')
+            .attr('fill', colors.needle)
             .attr('stroke', 'none');
 
         // 次のギアの針を描画（存在する場合）
@@ -168,7 +184,7 @@ const Tachometer: React.FC<TachometerProps> = ({
 
             svg.append('path')
                 .attr('d', `M ${nextNeedleBaseX1} ${nextNeedleBaseY1} L ${nextNeedleX} ${nextNeedleY} L ${nextNeedleBaseX2} ${nextNeedleBaseY2} Z`)
-                .attr('fill', '#0066cc')
+                .attr('fill', colors.nextNeedle)
                 .attr('stroke', 'none');
         }
 
@@ -177,13 +193,13 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('cx', centerX)
             .attr('cy', centerY)
             .attr('r', centerCircleRadius)
-            .attr('fill', '#333');
+            .attr('fill', colors.centerDark);
 
         svg.append('circle')
             .attr('cx', centerX)
             .attr('cy', centerY)
             .attr('r', innerCircleRadius)
-            .attr('fill', '#666');
+            .attr('fill', colors.centerLight);
 
         // テキスト位置の調整
         const rpmTextY = centerY + (150 * scaleFactor);
@@ -191,7 +207,7 @@ const Tachometer: React.FC<TachometerProps> = ({
 
         // RPM値がレッドゾーン以上かどうかを判定
         const isInRedZone = rpm >= redZone;
-        const rpmTextColor = isInRedZone ? '#FF0000' : 'black';
+        const rpmTextColor = isInRedZone ? colors.red : colors.text;
 
         // RPM値を表示（レッドゾーン以上なら赤色で表示）
         svg.append('text')
@@ -210,6 +226,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('text-anchor', 'middle')
             .attr('font-size', `${gearFontSize}px`)
             .attr('font-weight', 'bold')
+            .attr('fill', colors.text)
             .text(`${nextGearRpm ? `${gearNumber}-${Number(gearNumber) + 1}` : gearNumber}`);
 
     }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height, startAngle, endAngle, nextGearRpm]);

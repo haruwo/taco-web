@@ -1,4 +1,6 @@
 presets:
+  - modelCode: DJ5FS
+    description: マツダ デミオ XD ツーリング
   - modelCode: ND5RC
     description: マツダ ロードスター（ND 1.5）
   - modelCode: VAB
