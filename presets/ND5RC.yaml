@@ -12,7 +12,7 @@ gearRatios:
   ninth: 0
   reverse: 4.696
 finalDriveRatio: 2.866
-tireSize: 195/50/R19
+tireSize: 195/50R16
 yellowZone: 7000
 redZone: 7500
 maxRpm: 8000
