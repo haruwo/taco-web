@@ -324,6 +324,12 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                 const settings = yamlLoad(yamlStr) as Settings;
                 console.debug(settings);
 
+                if (settings.modelCode) {
+                    setModelCode(settings.modelCode);
+                }
+                if (settings.description) {
+                    setDescription(settings.description);
+                }
                 setGearRatios(settings.gearRatios);
                 setFinalDriveRatio(settings.finalDriveRatio);
                 setTireSize(settings.tireSize);
@@ -407,10 +413,34 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         <PresetSelector onSelect={loadPreset} presets={availablePresets} />
                     </div>
 
+                    <div className="bg-white p-6 rounded-lg shadow-md mb-6">
+                        <h2 className="text-xl font-semibold mb-4">基本情報</h2>
+                        <div className="grid grid-cols-1 gap-4">
+                            <div>
+                                <label className="block text-sm font-medium mb-1">型式</label>
+                                <input
+                                    type="text"
+                                    value={modelCode}
+                                    onChange={(e) => setModelCode(e.target.value)}
+                                    className="w-full px-3 py-2 border rounded-md"
+                                    placeholder="例: ND5RC"
+                                />
+                            </div>
+                            <div>
+                                <label className="block text-sm font-medium mb-1">説明</label>
+                                <input
+                                    type="text"
+                                    value={description}
+                                    onChange={(e) => setDescription(e.target.value)}
+                                    className="w-full px-3 py-2 border rounded-md"
+                                    placeholder="例: マツダ ロードスター（ND 1.5）"
+                                />
+                            </div>
+                        </div>
+                    </div>
+
                     <div className="bg-white p-6 rounded-lg shadow-md">
-
-
-                        <h2 className="text-xl font-semibold mb-4">ギア比設定</h2>
+                        <h2 className="text-xl font-semibold mb-4">詳細設定</h2>
 
                         <div className="grid grid-cols-2 gap-4 mb-6">
                             <div>
@@ -602,10 +632,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                         </div>
 
                         <div className="mb-6">
-                            <button
-                                onClick={saveSettings}
-                                className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-                            >
+                            <button onClick={saveSettings} className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded" >
                                 設定を保存
                             </button>
                             <label className="bg-green-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded cursor-pointer">
