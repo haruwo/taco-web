@@ -95,8 +95,8 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
 
             // パディングを考慮してサイズを調整
             const padding = 32; // p-4 = 16px × 2
-            const newWidth = Math.max(itemWidth - padding, 150);
-            const newHeight = Math.max(newWidth, 150); // 正方形に近い形に
+            const newWidth = Math.max(itemWidth - padding, 100);
+            const newHeight = Math.max(newWidth, 100); // 正方形に近い形に
 
             setTachometerSize({ width: newWidth, height: newHeight });
         };
@@ -387,7 +387,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             // 後退ギアは除外（rpmsの最後の要素）
                             if (index === rpms.length - 1) return null;
 
-                            let nextGearRpm = rpms[index + 1];
+                            let nextGearRpm: number | undefined = rpms[index + 1];
                             if (nextGearRpm > rpm) {
                                 nextGearRpm = undefined;
                             }
