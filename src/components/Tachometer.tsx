@@ -7,7 +7,7 @@ interface TachometerProps {
     yellowZone: number;
     redZone: number;
     speed: number;
-    gearNumber: number;
+    gearNumber: number | string;
     width?: number;
     height?: number;
     startAngle?: number;
@@ -210,7 +210,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('text-anchor', 'middle')
             .attr('font-size', `${gearFontSize}px`)
             .attr('font-weight', 'bold')
-            .text(`${nextGearRpm ? gearNumber + "-" + (gearNumber+1) : gearNumber}`);
+            .text(`${nextGearRpm ? `${gearNumber}-${Number(gearNumber) + 1}` : gearNumber}`);
 
     }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height, startAngle, endAngle, nextGearRpm]);
 
