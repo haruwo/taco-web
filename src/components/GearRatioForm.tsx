@@ -29,6 +29,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const defaultHeight = 300;
     const defaultStartAngle = Math.PI * 0.5;
     const defaultEndAngle = Math.PI * 2.0;
+    const defaultColumnsCount = 3; // デフォルトの列数
 
     // 状態管理
     const [gearRatios, setGearRatios] = useState(defaultGearRatios);
@@ -41,6 +42,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const [selectedGear, setSelectedGear] = useState(1);
     const [startAngle, setStartAngle] = useState(defaultStartAngle);
     const [endAngle, setEndAngle] = useState(defaultEndAngle);
+    const [columnsCount, setColumnsCount] = useState(defaultColumnsCount); // 列数の状態
 
     // タコメーターのサイズ管理
     const [tachometerSize, setTachometerSize] = useState({ width: 300, height: 300 });
@@ -114,7 +116,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         return () => {
             resizeObserver.disconnect();
         };
-    }, [rpms.length]); // RPMの数が変わったときにも再計算
+    }, [rpms.length, columnsCount]); // RPMの数と列数が変わったときにも再計算
 
     // ギア比の入力ハンドラー
     const handleGearRatioChange = (gear: keyof typeof gearRatios, value: string) => {
@@ -173,10 +175,31 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         setSelectedGear(gear);
     };
 
+    // 列数の変更ハンドラー
+    const handleColumnsCountChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const value = parseInt(e.target.value) || 1;
+        // 1〜6の範囲に制限
+        const clampedValue = Math.max(1, Math.min(6, value));
+        setColumnsCount(clampedValue);
+    };
+
     // 有効なギア数を計算
     const validGearCount = Object.values(gearRatios)
         .filter((ratio, index) => ratio > 0 && index < 9) // 前進ギアのみカウント
         .length;
+
+    // 列数に基づいたグリッドクラスを生成
+    const getGridColumnsClass = () => {
+        switch (columnsCount) {
+            case 1: return "grid-cols-1";
+            case 2: return "grid-cols-2";
+            case 3: return "grid-cols-3";
+            case 4: return "grid-cols-4";
+            case 5: return "grid-cols-5";
+            case 6: return "grid-cols-6";
+            default: return "grid-cols-3";
+        }
+    };
 
     return (
         <div className="container mx-auto p-4">
@@ -363,6 +386,17 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                 className="w-full px-3 py-2 border rounded-md"
                             />
                         </div>
+                        <div>
+                            <label className="block text-sm font-medium mb-1">タコメーター列数 (1-6)</label>
+                            <input
+                                type="number"
+                                min="1"
+                                max="6"
+                                value={columnsCount}
+                                onChange={handleColumnsCountChange}
+                                className="w-full px-3 py-2 border rounded-md"
+                            />
+                        </div>
                     </div>
 
                 </div>
@@ -382,7 +416,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             />
                         </div>
                     </div>
-                    <div ref={tachometerGridRef} className="grid grid-cols-3 gap-4">
+                    <div ref={tachometerGridRef} className={`grid ${getGridColumnsClass()} gap-4`}>
                         {rpms.map((rpm, index) => {
                             // 後退ギアは除外（rpmsの最後の要素）
                             if (index === rpms.length - 1) return null;
