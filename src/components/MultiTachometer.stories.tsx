@@ -19,6 +19,9 @@ const MultiTachometerDemo = () => {
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '20px', maxWidth: '700px' }}>
             {gearRatios.map((ratio, index) => {
                 const rpm = calculateRpm(speed, ratio);
+                const nextGearRpm = index < gearRatios.length - 1 
+                    ? calculateRpm(speed, gearRatios[index + 1])
+                    : undefined;
                 return (
                     <div key={index} style={{ border: '1px solid #ccc', borderRadius: '8px', padding: '10px' }}>
                         <Tachometer
@@ -28,6 +31,7 @@ const MultiTachometerDemo = () => {
                             redZone={7500}
                             speed={speed}
                             gearNumber={index + 1}
+                            nextGearRpm={nextGearRpm}
                         />
                     </div>
                 );

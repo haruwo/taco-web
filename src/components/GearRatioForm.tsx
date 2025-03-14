@@ -387,6 +387,11 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                             // 後退ギアは除外（rpmsの最後の要素）
                             if (index === rpms.length - 1) return null;
 
+                            let nextGearRpm = rpms[index + 1];
+                            if (nextGearRpm > rpm) {
+                                nextGearRpm = undefined;
+                            }
+
                             return (
                                 <div key={index} className="bg-white p-4 rounded-lg shadow-md tachometer-item">
                                     <Tachometer
@@ -396,6 +401,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                         redZone={redZone}
                                         speed={speed}
                                         gearNumber={index + 1}
+                                        nextGearRpm={nextGearRpm}
                                         width={tachometerSize.width}
                                         height={tachometerSize.height}
                                         startAngle={startAngle}

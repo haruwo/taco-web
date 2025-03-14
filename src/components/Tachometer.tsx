@@ -12,6 +12,7 @@ interface TachometerProps {
     height?: number;
     startAngle?: number;
     endAngle?: number;
+    nextGearRpm?: number;
 }
 
 const Tachometer: React.FC<TachometerProps> = ({
@@ -25,6 +26,7 @@ const Tachometer: React.FC<TachometerProps> = ({
     height = 300,
     startAngle = Math.PI * 0.5,
     endAngle = Math.PI * 2.0,
+    nextGearRpm,
 }) => {
     const svgRef = useRef<SVGSVGElement>(null);
 
@@ -151,6 +153,25 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('fill', 'red')
             .attr('stroke', 'none');
 
+        // 次のギアの針を描画（存在する場合）
+        if (nextGearRpm !== undefined) {
+            const nextNeedleAngle = scaleRpm(Math.min(nextGearRpm, maxRpm));
+            const nextNeedleX = centerX + needleLength * Math.cos(nextNeedleAngle);
+            const nextNeedleY = centerY + needleLength * Math.sin(nextNeedleAngle);
+
+            const nextNeedleBaseAngle1 = nextNeedleAngle + Math.PI / 2;
+            const nextNeedleBaseAngle2 = nextNeedleAngle - Math.PI / 2;
+            const nextNeedleBaseX1 = centerX + needleBaseSize * Math.cos(nextNeedleBaseAngle1);
+            const nextNeedleBaseY1 = centerY + needleBaseSize * Math.sin(nextNeedleBaseAngle1);
+            const nextNeedleBaseX2 = centerX + needleBaseSize * Math.cos(nextNeedleBaseAngle2);
+            const nextNeedleBaseY2 = centerY + needleBaseSize * Math.sin(nextNeedleBaseAngle2);
+
+            svg.append('path')
+                .attr('d', `M ${nextNeedleBaseX1} ${nextNeedleBaseY1} L ${nextNeedleX} ${nextNeedleY} L ${nextNeedleBaseX2} ${nextNeedleBaseY2} Z`)
+                .attr('fill', '#0066cc')
+                .attr('stroke', 'none');
+        }
+
         // 中心の円を描画
         svg.append('circle')
             .attr('cx', centerX)
@@ -200,7 +221,7 @@ const Tachometer: React.FC<TachometerProps> = ({
             .attr('font-weight', 'bold')
             .text(`${gearNumber}`);
 
-    }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height, startAngle, endAngle]);
+    }, [rpm, maxRpm, yellowZone, redZone, speed, gearNumber, width, height, startAngle, endAngle, nextGearRpm]);
 
     return (
         <div className="tachometer-container">
