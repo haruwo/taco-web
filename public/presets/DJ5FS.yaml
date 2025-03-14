@@ -1,21 +1,21 @@
 modelCode: DJ5FS
 description: マツダ デミオ XD ツーリング
 gearRatios:
-  first: 3.230
+  first: 3.23
   second: 1.652
   third: 1.088
   fourth: 0.775
-  fifth: 0.580
-  sixth: 0.490
+  fifth: 0.58
+  sixth: 0.49
   seventh: 0
   eighth: 0
   ninth: 0
   reverse: 3.454
-finalDriveRatio: 3.850
+finalDriveRatio: 3.85
 tireSize: 185/60R16
 yellowZone: 5000
 redZone: 5500
 maxRpm: 6000
-startAngle: 1.5707963267948966
-endAngle: 6.283185307179586
+startAngle: 1.8849555921538759
+endAngle: 5.969026041820607
 columnsCount: 3
