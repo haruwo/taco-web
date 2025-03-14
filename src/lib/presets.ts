@@ -57,14 +57,27 @@ export async function loadPresetDetails(modelCode: string): Promise<any> {
     }
 }
 
-// 後方互換性のために残す
-export const presets: PresetInfo[] = [
-    {
-        modelCode: "ND5RC",
-        description: "マツダ ロードスター（ND 1.5）",
-        url: "/presets/ND5RC.yaml"
-    }
-];
+// 後方互換性のために残す関数
+// 非同期版の loadPresets() を使用することを推奨
+export const presets: PresetInfo[] = [];
+
+// 初期化時に index.yaml からプリセットを読み込む
+if (typeof window !== 'undefined') {
+    loadPresets().then(loadedPresets => {
+        // 既存の配列を空にする
+        presets.length = 0;
+        // 読み込んだプリセットを追加
+        loadedPresets.forEach(preset => {
+            presets.push({
+                modelCode: preset.modelCode,
+                description: preset.description,
+                url: `/presets/${preset.modelCode}.yaml`
+            });
+        });
+    }).catch(error => {
+        console.error('プリセットの初期化に失敗しました:', error);
+    });
+}
 
 // 後方互換性のために残す（非同期版を使用することを推奨）
 export const getPresetByModelCodeSync = (modelCode: string): PresetInfo | undefined => {
@@ -73,22 +86,11 @@ export const getPresetByModelCodeSync = (modelCode: string): PresetInfo | undefi
 
 // 後方互換性のために残す（loadPresetDetails を使用することを推奨）
 export const loadPresetSettings = async (modelCode: string): Promise<any> => {
-    const preset = getPresetByModelCodeSync(modelCode);
+    // 非同期版を使用
+    const preset = await getPresetByModelCode(modelCode);
     if (!preset) {
         throw new Error(`プリセット ${modelCode} が見つかりません`);
     }
 
-    try {
-        const basePath = getBasePath();
-        const response = await fetch(`${basePath}${preset.url}`);
-        if (!response.ok) {
-            throw new Error(`プリセットの読み込みに失敗しました: ${response.statusText}`);
-        }
-
-        const yamlText = await response.text();
-        return yamlText;
-    } catch (error) {
-        console.error('プリセットの読み込みに失敗しました:', error);
-        throw new Error(`プリセット ${modelCode} の読み込みに失敗しました`);
-    }
+    return loadPresetDetails(modelCode);
 }; 

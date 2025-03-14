@@ -5,8 +5,9 @@ import PresetSelector from './PresetSelector';
 import { calculateRPMForAllGears } from '@/lib/rpmCalculator';
 import { calculateTireDiameter, calculateTireCircumference, calculateRotationsPerKm } from '@/lib/tireCalculator';
 import { dump as yamlDump, load as yamlLoad } from 'js-yaml';
-import { loadPresetSettings } from '@/lib/presets';
+import { loadPresetSettings, loadPresets } from '@/lib/presets';
 import { Settings, PresetInfo } from '@/types/settings';
+import { Preset } from '@/types/preset';
 
 interface GearRatioFormProps { }
 
@@ -15,6 +16,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const searchParams = useSearchParams();
     const [modelCode, setModelCode] = useState("ND5RC");
     const [description, setDescription] = useState("マツダ ロードスター（ND 1.5）");
+    const [availablePresets, setAvailablePresets] = useState<Preset[]>([]);
     const defaultGearRatios = {
         first: 5.087,
         second: 2.991,
@@ -237,6 +239,20 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         }
     };
 
+    // 初回レンダリング時にプリセット一覧を読み込む
+    useEffect(() => {
+        const fetchPresets = async () => {
+            try {
+                const presets = await loadPresets();
+                setAvailablePresets(presets);
+            } catch (error) {
+                console.error('プリセット一覧の読み込みに失敗しました:', error);
+            }
+        };
+
+        fetchPresets();
+    }, []);
+
     // URLパラメータからプリセットを読み込む
     useEffect(() => {
         const preset = searchParams.get('preset');
@@ -305,7 +321,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
         <div className="container mx-auto p-4">
             <h1 className="text-2xl font-bold mb-6">ギア比タコメーターアプリ</h1>
 
-            <PresetSelector onSelect={loadPreset} />
+            <PresetSelector onSelect={loadPreset} presets={availablePresets} />
 
             <div className="mb-4 flex gap-4">
                 <button
