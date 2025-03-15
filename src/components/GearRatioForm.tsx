@@ -14,8 +14,8 @@ interface GearRatioFormProps { }
 const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const router = useRouter();
     const searchParams = useSearchParams();
-    const [modelCode, setModelCode] = useState("ND5RC");
-    const [description, setDescription] = useState("マツダ ロードスター（ND 1.5）");
+    const [modelCode, setModelCode] = useState("");
+    const [description, setDescription] = useState("");
     const [availablePresets, setAvailablePresets] = useState<Preset[]>([]);
     const defaultGearRatios = {
         first: 5.087,
