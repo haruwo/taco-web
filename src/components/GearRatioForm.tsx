@@ -35,11 +35,9 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
     const defaultYellowZone = 7000;
     const defaultRedZone = 7500;
     const defaultMaxRpm = 8000;
-    const defaultWidth = 300;
-    const defaultHeight = 300;
     const defaultStartAngle = Math.PI * 0.5;
     const defaultEndAngle = Math.PI * 2.0;
-    const defaultColumnsCount = 3; // デフォルトの列数
+    const defaultColumnsCount = 0; // デフォルトの列数
 
     // 状態管理
     const [gearRatios, setGearRatios] = useState(defaultGearRatios);
@@ -654,7 +652,7 @@ const GearRatioForm: React.FC<GearRatioFormProps> = () => {
                                 <label className="block text-sm font-medium mb-1 dark:text-white">タコメーター列数 (1-9)</label>
                                 <input
                                     type="number"
-                                    min="1"
+                                    min="0"
                                     max="9"
                                     value={columnsCount}
                                     onChange={handleColumnsCountChange}
