@@ -18,4 +18,4 @@ redZone: 7500
 maxRpm: 8000
 startAngle: 1.5707963267948966
 endAngle: 6.283185307179586
-columnsCount: 3
+columnsCount: 2
